@@ -24,5 +24,13 @@ class Board:
 
         self.unplaced_ships.remove(ship)
 
-    def shoot(position):
-        pass
+    def shoot(self, row, column):
+        self.shot_grid[row][column] = True
+        ship = self.ship_grid[row][column]
+        if ship:
+            ship.take_damage()
+            if ship.is_sunk() == False:
+                return 'hit'
+            else:
+                return 'sink'
+        return 'miss'
