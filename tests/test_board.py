@@ -307,4 +307,3 @@ def test_shoot_raises_error_when_column_value_is_too_high():
     with pytest.raises(Exception) as e:
         board.shoot(5, 10)
     assert str(e.value) == "Cannot shoot outside of the grid."
-    pass
