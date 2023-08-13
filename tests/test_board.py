@@ -1,5 +1,6 @@
 from lib.board import Board
 from unittest.mock import Mock
+import pytest
 
 def test_is_initialized_with_a_list_of_unplaced_ships():
     ship1 = Mock()
@@ -176,3 +177,49 @@ def test_placing_multiple_ships_removes_them_from_unplaced_ships():
     board.place(ship2, 0, 0, 'vertical')
     board.place(ship3, 0, 1, 'vertical')
     assert board.unplaced_ships == [ship1]
+
+def test_placing_ship_past_the_right_of_the_board_raises_error():
+    ship = Mock()
+    ship.length = 3
+    board = Board([ship])
+    with pytest.raises(Exception) as e:
+        board.place(ship, 0, 8, 'horizontal')
+    error_message = str(e.value)
+    assert error_message == "Ship cannot be placed outside of the grid."
+
+
+def test_placing_ship_past_the_bottom_of_the_board_raises_error():
+    ship = Mock()
+    ship.length = 2
+    board = Board([ship])
+    with pytest.raises(Exception) as e:
+        board.place(ship, 9, 5, 'vertical')
+    error_message = str(e.value)
+    assert error_message == "Ship cannot be placed outside of the grid."
+
+def test_placing_ship_horizontally_on_top_of_another_raises_error():
+    ship1 = Mock()
+    ship1.length = 2
+    ship2 = Mock()
+    ship2.length = 3
+
+    board = Board([ship1, ship2])
+    board.place(ship1, 1, 1, 'vertical')
+    with pytest.raises(Exception) as e:
+        board.place(ship2, 1, 0, 'horizontal')
+    error_message = str(e.value)
+    assert error_message == "Ship cannot be placed on top of another ship"
+
+def test_placing_ship_horizontally_on_top_of_another_raises_error():
+    ship1 = Mock()
+    ship1.length = 2
+    ship2 = Mock()
+    ship2.length = 3
+
+    board = Board([ship1, ship2])
+    board.place(ship1, 1, 1, 'horizontal')
+    with pytest.raises(Exception) as e:
+        board.place(ship2, 0, 1, 'vertical')
+    error_message = str(e.value)
+    assert error_message == "Ship cannot be placed on top of another ship"
+    
