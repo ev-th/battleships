@@ -208,7 +208,7 @@ def test_placing_ship_horizontally_on_top_of_another_raises_error():
     with pytest.raises(Exception) as e:
         board.place(ship2, 1, 0, 'horizontal')
     error_message = str(e.value)
-    assert error_message == "Ship cannot be placed on top of another ship"
+    assert error_message == "Ship cannot be placed on top of another ship."
 
 def test_placing_ship_horizontally_on_top_of_another_raises_error():
     ship1 = Mock()
@@ -221,7 +221,7 @@ def test_placing_ship_horizontally_on_top_of_another_raises_error():
     with pytest.raises(Exception) as e:
         board.place(ship2, 0, 1, 'vertical')
     error_message = str(e.value)
-    assert error_message == "Ship cannot be placed on top of another ship"
+    assert error_message == "Ship cannot be placed on top of another ship."
 
 def test_shoot_updates_shot_grid_at_correct_position():
     board = Board([])
@@ -288,3 +288,23 @@ def test_shoot_returns_sunk_when_there_is_ship_at_coords_and_it_is_sunk():
     board = Board([ship])
     board.place(ship, 0, 0, 'horizontal')
     assert board.shoot(0, 0) == 'sink'
+
+def test_shoot_raises_error_when_coords_have_already_taken_a_shot():
+    board = Board([])
+    board.shoot(5, 5)
+    with pytest.raises(Exception) as e:
+        board.shoot(5, 5)
+    assert str(e.value) == "Cannot shoot the same coordinates twice."
+
+def test_shoot_raises_error_when_row_value_is_too_high():
+    board = Board([])
+    with pytest.raises(Exception) as e:
+        board.shoot(10, 5)
+    assert str(e.value) == "Cannot shoot outside of the grid."
+
+def test_shoot_raises_error_when_column_value_is_too_high():
+    board = Board([])
+    with pytest.raises(Exception) as e:
+        board.shoot(5, 10)
+    assert str(e.value) == "Cannot shoot outside of the grid."
+    pass

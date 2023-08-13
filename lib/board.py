@@ -10,7 +10,7 @@ class Board:
                 raise Exception("Ship cannot be placed outside of the grid.")
             for i in range(ship.length):
                 if self.ship_grid[row + i][column] != None:
-                    raise Exception("Ship cannot be placed on top of another ship")
+                    raise Exception("Ship cannot be placed on top of another ship.")
             for i in range(ship.length):
                 self.ship_grid[row + i][column] = ship
         if orientation == 'horizontal':
@@ -18,13 +18,20 @@ class Board:
                 raise Exception("Ship cannot be placed outside of the grid.")
             for i in range(ship.length):
                 if self.ship_grid[row][column + i] != None:
-                    raise Exception("Ship cannot be placed on top of another ship")
+                    raise Exception("Ship cannot be placed on top of another ship.")
             for i in range(ship.length):
                 self.ship_grid[row][column + i] = ship
 
         self.unplaced_ships.remove(ship)
 
     def shoot(self, row, column):
+        if row >= 10:
+            raise Exception("Cannot shoot outside of the grid.")
+        if column >= 10:
+            raise Exception("Cannot shoot outside of the grid.")
+        if self.shot_grid[row][column] == True:
+            raise Exception("Cannot shoot the same coordinates twice.")
+
         self.shot_grid[row][column] = True
         ship = self.ship_grid[row][column]
         if ship:
