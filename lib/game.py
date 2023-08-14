@@ -6,13 +6,16 @@ class Game:
             {"name": player2, "board": board_class()}
         ]
 
+    def get_unplaced_ships():
+        pass
+
     def place_ship(self, row, column, length):
         pass
 
     def shoot(self, row, column):
         pass
 
-    def get_current_player(self):
+    def get_current_player_name(self):
         pass
 
     def get_current_player_board(self):
