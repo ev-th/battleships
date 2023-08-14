@@ -16,8 +16,10 @@ def test_display_ships_displays_empty_ship_grid():
     ]
     board = Mock()
     board.ship_grid = ship_grid
+    board.grid_size = 10
 
-    result = BoardFormatter.display_ships(board)
+    formatter = BoardFormatter(board)
+    result = formatter.display_ships()
 
     expected_result = '  | A | B | C | D | E | F | G | H | I | J |\n'
     expected_result += '--|---+---+---+---+---+---+---+---+---+---|\n'
@@ -58,12 +60,15 @@ def test_display_ships_displays_multiple_ships():
         [None, None, None, None, None, None, None, None, None, None],
         [None, None, None, None, None, None, None, None, None, None],
         [None, None, None, None, None, None, None, None, None, None],
-        [None, None, None, None, None, ship3, ship3, ship3, ship3, None],
+        [None, None, None, None, None, ship3, ship3, ship3, ship3, None]
     ]
     board = Mock()
     board.ship_grid = ship_grid
+    board.grid_size = 10
 
-    result = BoardFormatter.display_ships(board)
+
+    formatter = BoardFormatter(board)
+    result = formatter.display_ships()
 
     expected_result = '  | A | B | C | D | E | F | G | H | I | J |\n'
     expected_result += '--|---+---+---+---+---+---+---+---+---+---|\n'
@@ -108,7 +113,8 @@ def test_display_shots_displays_empty_shot_grid():
     board.grid_size = 10
     board.shot_grid = shot_grid
 
-    result = BoardFormatter.display_shots(board)
+    formatter = BoardFormatter(board)
+    result = formatter.display_shots()
 
     expected_result = '  | A | B | C | D | E | F | G | H | I | J |\n'
     expected_result += '--|---+---+---+---+---+---+---+---+---+---|\n'
@@ -170,7 +176,8 @@ def test_display_shots_displays_shots():
     board.shot_grid = shot_grid
     board.grid_size = 10
 
-    result = BoardFormatter.display_shots(board)
+    formatter = BoardFormatter(board)
+    result = formatter.display_shots()
 
     expected_result = '  | A | B | C | D | E | F | G | H | I | J |\n'
     expected_result += '--|---+---+---+---+---+---+---+---+---+---|\n'
