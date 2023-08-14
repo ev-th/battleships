@@ -12,6 +12,11 @@ def test_is_initialized_with_a_list_of_unplaced_ships():
 
     assert board.unplaced_ships == ships
 
+def test_is_initialized_with_an_empty_list_of_placed_ships():
+    board = Board([])
+
+    assert board.placed_ships == []
+
 def test_is_initialized_with_an_empty_ship_grid():
     board = Board([])
     expected_grid = [
@@ -165,6 +170,16 @@ def test_placing_ship_removes_it_from_unplaced_ships():
     board.place(ship1, 0, 0, 'vertical')
     assert board.unplaced_ships == [ship2]
 
+def test_placing_ship_adds_it_to_placed_ships():
+    ship1 = Mock()
+    ship1.length = 2
+    ship2 = Mock()
+    ship2.length = 3
+
+    board = Board([ship1, ship2])
+    board.place(ship1, 0, 0, 'vertical')
+    assert board.placed_ships == [ship1]
+
 def test_placing_multiple_ships_removes_them_from_unplaced_ships():
     ship1 = Mock()
     ship1.length = 2
@@ -177,6 +192,19 @@ def test_placing_multiple_ships_removes_them_from_unplaced_ships():
     board.place(ship2, 0, 0, 'vertical')
     board.place(ship3, 0, 1, 'vertical')
     assert board.unplaced_ships == [ship1]
+
+def test_placing_multiple_ships_adds_them_to_placed_ships():
+    ship1 = Mock()
+    ship1.length = 2
+    ship2 = Mock()
+    ship2.length = 3
+    ship3 = Mock()
+    ship3.length = 5
+
+    board = Board([ship1, ship2, ship3])
+    board.place(ship2, 0, 0, 'vertical')
+    board.place(ship3, 0, 1, 'vertical')
+    assert board.placed_ships == [ship2, ship3]
 
 def test_placing_ship_past_the_right_of_the_board_raises_error():
     ship = Mock()
@@ -307,3 +335,41 @@ def test_shoot_raises_error_when_column_value_is_too_high():
     with pytest.raises(Exception) as e:
         board.shoot(5, 10)
     assert str(e.value) == "Cannot shoot outside of the grid."
+
+def test_is_defeated_returns_True_if_any_ships_on_ship_grid_have_positive_health():
+    ship1 = Mock()
+    ship1.length = 2
+    ship1.health = 0
+    ship2 = Mock()
+    ship2.length = 3
+    ship2.health = 1
+    board = Board([ship1, ship2])
+    board.place(ship1, 0, 0, 'horizontal')
+    board.place(ship2, 4, 5, 'horizontal')
+
+    result = board.is_defeated()
+
+    assert result == False
+
+def test_is_defeated_returns_True_if_all_ships_on_ship_grid_have_0_health():
+    ship1 = Mock()
+    ship1.length = 2
+    ship1.health = 0
+    ship2 = Mock()
+    ship2.length = 3
+    ship2.health = 0
+    board = Board([ship1, ship2])
+    board.place(ship1, 0, 0, 'horizontal')
+    board.place(ship2, 4, 5, 'horizontal')
+
+    result = board.is_defeated()
+
+    assert result == True
+
+def test_is_defeated_raises_error_if_no_ships_on_ship_grid():
+    board = Board([])
+
+    with pytest.raises(Exception) as e:
+        board.is_defeated()
+
+    assert str(e.value) == "There are no ships placed on the board."
